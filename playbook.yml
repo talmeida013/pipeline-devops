@@ -1,0 +1,20 @@
+---
+- name: Configure Azure Function
+  hosts: localhost
+  connection: local
+  vars:
+    ansible_python_interpreter: '{{ ansible_playbook_python }}'
+  tasks:
+    - name: Ensure Azure Function is Always On, HTTPS Only, and FTP Enabled
+      azure_rm_webapp:
+        resource_group: "SenacTFResourceGroup"  # Nome do grupo de recursos
+        name: "senaclabazurefunctionthalita"      # Nome da Azure Function App
+        plan: "azure-functions-senaclab-service-plan"  # Nome do plano de serviço
+        state: present
+        always_on: true
+        https_only: true      # Habilita apenas conexões HTTPS
+        ftps_state: "AllAllowed"  # Habilita FTP e FTPS (pode ser "FtpsOnly" para permitir apenas FTPS)
+        frameworks:
+          - name: "python"
+            version: "3.10"
+      register: azure_function
